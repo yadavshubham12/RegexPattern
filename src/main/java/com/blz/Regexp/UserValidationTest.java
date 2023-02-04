@@ -1,33 +1,34 @@
 package com.blz.Regexp;
 
 import org.testng.annotations.Test;
+import org.junit.runners.Parameterized;
+import java.util.Arrays;
+import java.util.Collection;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+    public class EmailValidationTest {
 
-public class UserValidationTest {
-    @Test
-    public void happyTestCase() {
-        User user = new User("Shubham", "Yadav", "Shubham@example.com", "1234567890", "password");
-        boolean result = user.validate();
-        assert equals(true, result);
-    }
+        private String email;
+        private boolean expectedResult;
 
-    @Test
-    public void sadTestCase_InvalidEmail() {
-        User user = new User("Shubham", "Yadav", "Shubhamexample.com", "1234567890", "password");
-        boolean result = user.validate();
-        assertEquals(false, result);
+        public EmailValidationTest(String email, boolean expectedResult) {
+            this.email = email;
+            this.expectedResult = expectedResult;
+        }
+        public static Collection<Object[]> data() {
+            return Arrays.asList(new Object[][] {
+                    {"shubham.yadav@example.com", true},
+                    {"shubham_yadav@example.com", true},
+                    {"shubhamyadav@sub.example.com", true},
+                    {"shubhamyadav@example", false},
+                    {"shubhamyadavexample.com", false},
+                    {"@example.com", false}
+            });
+        }
+        @Test
+        public void testEmailValidation() {
+            boolean result = User.isValidEmail(email);
+            assertEquals(expectedResult, result);
+        }
     }
-
-    @Test
-    public void sadTestCase_InvalidMobile() {
-        User user = new User("Jane", "Doe", "janedoe@example.com", "123456", "password");
-        boolean result = user.validate();
-        assertEquals(false, result);
-    }
-
-    @Test
-    public void sadTestCase_InvalidPassword() {
-        User user = new User("Jane", "Doe", "janedoe@example.com", "1234567890", "pass");
-        boolean result = user.validate();
-        assertEquals(false, result);
-    }
-}
